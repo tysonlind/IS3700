@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Epunda+Sans:ital,wght@0,300..900;1,300..900&display=swap"
@@ -22,41 +22,51 @@
     />
   </head>
   <body>
-    <header>
-      <h1>JavaJam Coffee Bar</h1>
-      <nav>
-        <a href="#">Home</a> &nbsp; <a href="menu.html">Menu</a> &nbsp;
-        <a href="#">Music</a> &nbsp; <a href="#">Jobs</a> &nbsp;
-      </nav>
-    </header>
+    <div class="container">
+      <div class="flexPage">
+        <aside class="sidebar">
+          <img src="./images/coffeelogo.jpg" />
+          <nav>
+            <a href="index.html" class="navText">Home</a>
+            <a href="menu.html" class="navText">Menu</a>
+            <a href="music.html" class="navText">Music</a>
+            <a href="jobs.html" class="navText">Jobs</a>
+          </nav>
+        </aside>
 
-    <main>
-      <img src="./images/hero.jpg" />
-      <h2>Relax at JavaJam</h2>
-      <p>
-        Friendly and eclectic &mdash; JavaJam Coffee Bar is the perfect place to
-        take a break, enjoy a refreshing beverage, and have a snack or light
-        meal.
-      </p>
+        <section class="content">
+          <header>
+            <h1>JavaJam Coffee Bar</h1>
+          </header>
 
-      <ul>
-        <li>Specialty Coffee and Organic Tea</li>
-        <li>Bagels, Muffins, and Gluten-free Pastries</li>
-        <li>Organic Salads</li>
-        <li>Music and Poetry Readings</li>
-        <li>Open Mic Night</li>
-      </ul>
+          <main>
+            <img class="hero" src="./images/hero.jpg" alt="JavaJam hero" />
+            <h2>Relax at JavaJam</h2>
+            <p>
+              Friendly and eclectic — JavaJam Coffee Bar is the perfect place to
+              take a break, enjoy a refreshing beverage, and have a snack or
+              light meal.
+            </p>
+            <ul>
+              <li>Specialty Coffee and Organic Tea</li>
+              <li>Bagels, Muffins, and Gluten-free Pastries</li>
+              <li>Organic Salads</li>
+              <li>Music and Poetry Readings</li>
+              <li>Open Mic Night</li>
+            </ul>
+            <address>
+              12010 Garrett Bay Road<br />
+              Ellison Bay, WI 54210<br />
+              888-555-5555
+            </address>
+          </main>
+        </section>
+      </div>
 
-      <address>
-        12010 Garrett Bay Road<br />
-        Ellison Bay, WI 54210<br />
-        888-555-5555
-      </address>
-    </main>
-
-    <footer>
-      Copyright &copy; 2025 JavaJam Coffee Bar<br />
-      <a href="mailto:tyson@lind.com">tyson@lind.com</a>
-    </footer>
+      <footer>
+        Copyright &copy; 2025 JavaJam Coffee Bar<br />
+        <a href="mailto:tyson@lind.com">tyson@lind.com</a>
+      </footer>
+    </div>
   </body>
 </html>
