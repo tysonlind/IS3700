@@ -4,6 +4,42 @@
 	box-sizing: border-box;
 }
 
+/* Universal styling */
+
+#herojobs {
+  height: 300px;
+  background-image: url(images/coffeecup.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+
+table {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  border-spacing: 0;
+}
+td, th {
+  padding: 10px;
+  vertical-align: top;
+  text-align: left;
+}
+tbody tr:nth-of-type(odd) {
+  background-color: #D2B48E;
+}
+
+/* Narrow view: single-column form with spacing */
+form {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1em;
+  width: 80%;
+}
+input, textarea {
+  margin-bottom: .5em;
+}
+
 /* Configure Small Layout */
 body {
 	background-color: #D2B48C;
@@ -193,6 +229,26 @@ footer {
 
 	nav li {
 		border-bottom: none;
+	}
+
+	form {
+		width: 30%;
+		display: grid;
+		grid-template-columns: 6em 1fr;
+		gap: 1em;
+		padding-left: 1em;
+	}
+	input[type="submit"] {
+		grid-column: 2;
+		width: 9em;
+	}
+
+	/* Larger hero image for Jobs */
+	#herojobs {
+		background-image: url(images/herojobs.jpg);
+		height: 50vh;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
 	}
 
 	#homehero {
