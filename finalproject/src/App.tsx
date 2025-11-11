@@ -1,8 +1,6 @@
 import { 
-  useMemo, 
-  useState, 
-  useRef, 
-  useEffect } from 'react'
+  useMemo,  
+  useRef } from 'react'
 import {
   motion,
   AnimatePresence,
