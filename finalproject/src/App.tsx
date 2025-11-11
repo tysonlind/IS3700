@@ -1,4 +1,8 @@
-import { useMemo, useState, useRef, useEffect } from 'react'
+import { 
+  useMemo, 
+  useState, 
+  useRef, 
+  useEffect } from 'react'
 import {
   motion,
   AnimatePresence,
@@ -285,6 +289,10 @@ function Features() {
               tone: 'info',
             },
           }}
+          buttonText={{
+            one: 'Get More Info',
+            two: 'See next'
+          }}
         />
       </div>
     </section>
@@ -302,6 +310,10 @@ type RowText = {
   three?: RowInfo
   four?: RowInfo
 }
+type ButtonText = {
+  one?: string
+  two?: string
+}
 
 function Feature({
   eyebrow,
@@ -309,12 +321,14 @@ function Feature({
   copy,
   imgPosition = 'right',
   rowText,
+  buttonText
 }: {
   eyebrow: string
   title: string
   copy: string
   imgPosition?: 'left' | 'right'
   rowText?: RowText
+  buttonText?: ButtonText
 }) {
   const r1 = rowText?.one ?? { label: 'Auto-renewal', value: '12 months, 60-day notice', tone: 'warn' as const }
   const r2 = rowText?.two ?? { label: 'Liability cap', value: '2× fees', tone: 'risk' as const }
@@ -332,8 +346,8 @@ function Feature({
           <Row label={r4.label} value={r4.value} tone={r4.tone} />
         </div>
         <div className="mt-5 flex gap-2">
-          <button className="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-sm">Download</button>
-          <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-sm">Copy summary</button>
+          <button className="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-sm">{buttonText?.one ? buttonText.one : 'Download'}</button>
+          <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-sm">{buttonText?.two ? buttonText.two : 'Copy summary'}</button>
         </div>
       </div>
     </Reveal>
