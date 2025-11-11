@@ -36,11 +36,13 @@ function Navbar() {
   const borderOpacity = useTransform(scrollY, [0, 120], [0, 1])
   const bgColor = useTransform(bgOpacity, (o) => `rgba(255, 255, 255, ${o})`)
   const borderColor = useTransform(borderOpacity, (o) => `rgba(226, 232, 240, ${o})`)
+  /*
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
     const unsub = scrollY.on('change', (v) => setScrolled(v > 4))
     return () => unsub()
   }, [scrollY])
+   */
   return (
     <motion.div className="sticky top-0 z-40 backdrop-blur" style={{ backgroundColor: bgColor }}>
       <motion.div className="border-b" style={{ borderColor }}>
