@@ -1,13 +1,17 @@
-import { 
-  useMemo,  
-  useRef } from 'react'
+import { useMemo, useRef, useLayoutEffect } from 'react';
 import {
   motion,
-  AnimatePresence,
   useScroll,
+  AnimatePresence,
+  useMotionValue,
+  animate,
   useTransform,
-} from 'framer-motion'
-import Logo from './assets/imgs/BrieflyLogo.png'
+} from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Logo from './assets/imgs/BrieflyLogo.png';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
   return (
@@ -25,15 +29,18 @@ export default function App() {
       <CTA />
       <Footer />
     </div>
-  )
+  );
 }
 
 function Navbar() {
-  const { scrollY } = useScroll()
-  const bgOpacity = useTransform(scrollY, [0, 120], [0, 1])
-  const borderOpacity = useTransform(scrollY, [0, 120], [0, 1])
-  const bgColor = useTransform(bgOpacity, (o) => `rgba(255, 255, 255, ${o})`)
-  const borderColor = useTransform(borderOpacity, (o) => `rgba(226, 232, 240, ${o})`)
+  const { scrollY } = useScroll();
+  const bgOpacity = useTransform(scrollY, [0, 120], [0, 1]);
+  const borderOpacity = useTransform(scrollY, [0, 120], [0, 1]);
+  const bgColor = useTransform(bgOpacity, (o) => `rgba(255, 255, 255, ${o})`);
+  const borderColor = useTransform(
+    borderOpacity,
+    (o) => `rgba(226, 232, 240, ${o})`
+  );
   /*
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
@@ -42,7 +49,10 @@ function Navbar() {
   }, [scrollY])
    */
   return (
-    <motion.div className="sticky top-0 z-40 backdrop-blur" style={{ backgroundColor: bgColor }}>
+    <motion.div
+      className="sticky top-0 z-40 backdrop-blur"
+      style={{ backgroundColor: bgColor }}
+    >
       <motion.div className="border-b" style={{ borderColor }}>
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -50,28 +60,44 @@ function Navbar() {
             <span className="font-bold tracking-tight">Briefly.AI</span>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#features" className="hover:text-slate-600">Features</a>
-            <a href="#how" className="hover:text-slate-600">How it works</a>
-            <a href="#security" className="hover:text-slate-600">Security</a>
-            <a href="#cta" className="hover:text-slate-600">Pricing</a>
-            <a href="#cta" className="px-3 py-1.5 rounded-xl bg-slate-900 text-white">Try Free</a>
+            <a href="#features" className="hover:text-slate-600">
+              Features
+            </a>
+            <a href="#how" className="hover:text-slate-600">
+              How it works
+            </a>
+            <a href="#security" className="hover:text-slate-600">
+              Security
+            </a>
+            <a href="#cta" className="hover:text-slate-600">
+              Pricing
+            </a>
+            <a
+              href="#cta"
+              className="px-3 py-1.5 rounded-xl bg-slate-900 text-white"
+            >
+              Try Free
+            </a>
           </nav>
         </div>
       </motion.div>
     </motion.div>
-  )
+  );
 }
 
 function Hero() {
-  const title = 'Briefly.AI'
-  const letters = useMemo(() => title.split(''), [title])
-  const sectRef = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress } = useScroll({ target: sectRef, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [0, 40])
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.98])
-  const INTRO_DURATION = 1.1
-  const STAGGER = 0.06
-  const totalIntro = INTRO_DURATION + (letters.length - 1) * STAGGER + 0.15
+  const title = 'Briefly.AI';
+  const letters = useMemo(() => title.split(''), [title]);
+  const sectRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectRef,
+    offset: ['start end', 'end start'],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [0, 40]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.98]);
+  const INTRO_DURATION = 1.1;
+  const STAGGER = 0.06;
+  const totalIntro = INTRO_DURATION + (letters.length - 1) * STAGGER + 0.15;
   return (
     <section ref={sectRef} className="relative">
       <div className="mx-auto max-w-6xl px-4 pt-16">
@@ -82,16 +108,30 @@ function Hero() {
               <motion.span
                 aria-hidden
                 className="relative inline-flex select-none [transform-style:preserve-3d] overflow-visible squeeze-bounce"
-                style={{ ['--intro-ms' as any]: `${Math.round(totalIntro * 1000)}ms` }}
+                style={{
+                  ['--intro-ms' as any]: `${Math.round(totalIntro * 1000)}ms`,
+                }}
                 initial="hidden"
                 animate="visible"
               >
                 <motion.span
                   className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-slate-900"
                   initial={{ opacity: 0, x: 0, scaleY: 1 }}
-                  animate={{ opacity: [0, 1, 1, 0], x: [-40, -40, -20, -20], y: [-80], scaleY: [1, 1, 0.96, 1] }}
-                  transition={{ delay: totalIntro, duration: 1.1, ease: 'easeInOut', times: [0, 0.12, 0.86, 1] }}
-                >l</motion.span>
+                  animate={{
+                    opacity: [0, 1, 1, 0],
+                    x: [-40, -40, -20, -20],
+                    y: [-80],
+                    scaleY: [1, 1, 0.96, 1],
+                  }}
+                  transition={{
+                    delay: totalIntro,
+                    duration: 1.1,
+                    ease: 'easeInOut',
+                    times: [0, 0.12, 0.86, 1],
+                  }}
+                >
+                  l
+                </motion.span>
                 {letters.map((ch, i) => (
                   <motion.span
                     key={`${ch}-${i}`}
@@ -105,9 +145,21 @@ function Hero() {
                 <motion.span
                   className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-slate-900"
                   initial={{ opacity: 0, x: 0, scaleY: 1 }}
-                  animate={{ opacity: [0, 1, 1, 0], x: [40, 40, 20, 20], y: [-80], scaleY: [1, 1, 0.96, 1] }}
-                  transition={{ delay: totalIntro, duration: 1.1, ease: 'easeInOut', times: [0, 0.12, 0.86, 1] }}
-                >l</motion.span>
+                  animate={{
+                    opacity: [0, 1, 1, 0],
+                    x: [40, 40, 20, 20],
+                    y: [-80],
+                    scaleY: [1, 1, 0.96, 1],
+                  }}
+                  transition={{
+                    delay: totalIntro,
+                    duration: 1.1,
+                    ease: 'easeInOut',
+                    times: [0, 0.12, 0.86, 1],
+                  }}
+                >
+                  l
+                </motion.span>
               </motion.span>
             </AnimatePresence>
           </span>
@@ -116,37 +168,60 @@ function Hero() {
       <div className="mx-auto max-w-6xl px-4 pt-8 pb-24 grid md:grid-cols-2 gap-10 items-center">
         <div>
           <p className="mt-6 text-lg text-slate-600">
-            Summarize legal contracts and highlight clauses that are malicious, risky, or dangerous. Never be caught unaware by terms of service or privacy policies again.
+            Summarize legal contracts and highlight clauses that are malicious,
+            risky, or dangerous. Never be caught unaware by terms of service or
+            privacy policies again.
           </p>
           <div className="mt-8 flex items-center gap-3">
-            <a href="#cta" className="px-5 py-3 rounded-2xl bg-slate-900 text-white font-medium">Start free trial</a>
-            <a href="#how" className="px-5 py-3 rounded-2xl border border-slate-200">See how it works</a>
+            <a
+              href="#cta"
+              className="px-5 py-3 rounded-2xl bg-slate-900 text-white font-medium"
+            >
+              Start free trial
+            </a>
+            <a
+              href="#how"
+              className="px-5 py-3 rounded-2xl border border-slate-200"
+            >
+              See how it works
+            </a>
           </div>
-          <div className="mt-6 text-xs text-slate-500">No credit card required · SOC2-ready workflow</div>
+          <div className="mt-6 text-xs text-slate-500">
+            No credit card required · SOC2-ready workflow
+          </div>
         </div>
         <motion.div className="relative" style={{ y, scale }}>
-          <Reveal y={24}>
-            <div className="rounded-3xl border border-slate-100 shadow-xl p-4 md:p-6 bg-white">
-              <div className="text-sm text-slate-500 mb-3">Contract summary</div>
-              <div className="space-y-3">
-                <Chip label="Auto-renewal" tone="warn" />
-                <Chip label="Unilateral termination" tone="warn" />
-                <Chip label="Excessive liability cap" tone="risk" />
-                <Chip label="Confidentiality exceptions" tone="info" />
-                <Chip label="Governing law: CA" tone="ok" />
+          <TiltCard>
+            <Reveal y={24}>
+              <div className="rounded-3xl border border-slate-100 shadow-xl p-4 md:p-6 bg-white relative">
+                <div className="text-sm text-slate-500 mb-3 flex items-center gap-2">
+                  <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_0_4px_rgba(16,185,129,0.25)]" />
+                  Contract summary
+                </div>
+                <div className="space-y-3">
+                  <Chip label="Auto-renewal" tone="warn" />
+                  <Chip label="Unilateral termination" tone="warn" />
+                  <Chip label="Excessive liability cap" tone="risk" />
+                  <Chip label="Confidentiality exceptions" tone="info" />
+                  <Chip label="Governing law: CA" tone="ok" />
+                </div>
+                <div className="mt-6 text-sm leading-6 text-slate-600">
+                  Briefly explains each clause in plain English and suggests
+                  safe remediations. Export a redlined draft or share a link.
+                </div>
               </div>
-              <div className="mt-6 text-sm leading-6 text-slate-600">
-                Briefly explains each clause in plain English and suggests safe remediations. Export a redlined draft or share a link.
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </TiltCard>
         </motion.div>
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-70" aria-hidden>
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-70"
+        aria-hidden
+      >
         <div className="mx-auto max-w-6xl h-[400px] blur-3xl bg-gradient-to-b from-indigo-50 via-purple-50 to-transparent" />
       </div>
     </section>
-  )
+  );
 }
 
 function Divider() {
@@ -154,7 +229,7 @@ function Divider() {
     <div className="mx-auto max-w-6xl px-4">
       <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
     </div>
-  )
+  );
 }
 
 const letterVariants = {
@@ -165,10 +240,10 @@ const letterVariants = {
     y: [-40, 0, -3, 0, -1, 0],
     scaleY: [1, 1, 0.988, 1.01, 0.998, 1],
   },
-}
+};
 
 function letterTransition(i: number) {
-  const base = 0.06
+  const base = 0.06;
   return {
     duration: 1.1,
     delay: i * base,
@@ -180,9 +255,21 @@ function letterTransition(i: number) {
       [0.2, 0.6, 0.0, 1.0],
       [0.17, 0.88, 0.32, 1.27],
     ],
-  } as any
+  } as any;
 }
 function Logos() {
+  const companies = [
+    'Northwind Capital',
+    'Aurora Labs',
+    'Vertex Finance',
+    'Helix Healthcare',
+    'Nimbus Cloud',
+    'Atlas Procurement',
+    'Summit Legal',
+    'Parallel Ventures',
+    'Cinder Systems',
+    'Radiant Analytics',
+  ];
   return (
     <section className="py-12 border-y border-slate-100 bg-slate-50/60">
       <div className="mx-auto max-w-6xl px-4">
@@ -190,19 +277,80 @@ function Logos() {
           Trusted by legal, finance, and procurement teams
         </p>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 items-center opacity-70">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <LogoGhost key={i} />
+          {companies.map((name) => (
+            <LogoPill key={name} name={name} />
           ))}
         </div>
       </div>
     </section>
-  )
+  );
+}
+
+function LogoPill({ name }: { name: string }) {
+  const randomLightColorGenerator = () => {
+    let r = Math.random() * 30 + 210;
+    let g = Math.random() * 30 + 210;
+    let b = Math.random() * 30 + 210;
+    return { r, g, b };
+  };
+  const { r, g, b } = randomLightColorGenerator();
+  return (
+    <div
+      className="h-10 rounded-2xl border border-slate-200 bg-white shadow-sm flex items-center justify-center"
+      style={{ background: `rgba(${r},${g},${b}, 0.6)` }}
+    >
+      <span className="text-[11px] font-semibold tracking-[0.18em] text-slate-500 uppercase">
+        {name}
+      </span>
+    </div>
+  );
+}
+
+function TiltCard({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // map -0.5..0.5 to tilt angles
+  const rotateX = useTransform(y, [-0.5, 0.5], [10, -10]);
+  const rotateY = useTransform(x, [-0.5, 0.5], [-16, 16]);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width; // 0..1
+    const relY = (e.clientY - rect.top) / rect.height; // 0..1
+    x.set(relX - 0.5);
+    y.set(relY - 0.5);
+  }
+
+  function handleMouseLeave() {
+    animate(x, 0, { type: 'spring', stiffness: 200, damping: 20 });
+    animate(y, 0, { type: 'spring', stiffness: 200, damping: 20 });
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      className="relative group"
+      style={{
+        rotateX,
+        rotateY,
+        transformPerspective: 900,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-tr from-indigo-200/40 via-sky-200/40 to-purple-200/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {children}
+    </motion.div>
+  );
 }
 
 function LogoGhost() {
   return (
     <div className="h-8 bg-gradient-to-br from-white to-slate-100 rounded-xl border border-slate-200" />
-  )
+  );
 }
 
 function Reveal({
@@ -210,9 +358,9 @@ function Reveal({
   y = 16,
   delay = 0,
 }: {
-  children: React.ReactNode
-  y?: number
-  delay?: number
+  children: React.ReactNode;
+  y?: number;
+  delay?: number;
 }) {
   return (
     <motion.div
@@ -223,97 +371,122 @@ function Reveal({
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 function Features() {
+  const root = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    if (!root.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from('.feature-card', {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top 75%',
+        },
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="features" className="py-20">
+    <section id="features" className="py-20" ref={root}>
       <div className="mx-auto max-w-6xl px-4 space-y-20">
-        <Feature
-          eyebrow="Clause detection"
-          title="Surface risky terms instantly"
-          copy="We flag auto-renewals, one-sided indemnities, non-mutual termination, choice of law mismatches, and more. Customize rules to match your risk profile."
-          imgPosition="right"
-          rowText={{
-            one: {
-              label: 'Auto-Renewal',
-              value: '12 months, 60-day notice',
-              tone: 'warn',
-            },
-            two: {
-              label: 'Liability Cap',
-              value: '2x fees',
-              tone: 'risk',
-            },
-            three: {
-              label: 'Indemnity',
-              value: 'One-sided',
-              tone: 'risk',
-            },
-            four: {
-              label: 'Arbitration',
-              value: 'Signing away right to pursue legal action',
-              tone: 'rights',
-            },
-          }}
-        />
-        <Feature
-          eyebrow="Plain-language summaries"
-          title="Explain complex contracts in seconds"
-          copy="Briefly converts dense legal into digestible summaries with links back to the original clauses — great for terms of service and privacy policies."
-          imgPosition="left"
-          rowText={{
-            one: {
-              label: 'Data Sharing with Third Parties',
-              value:
-                'Allows your personal data to be sold or shared with advertisers or partners',
-              tone: 'info',
-            },
-            two: {
-              label: 'Unilateral Policy Changes',
-              value:
-                'Lets the company change terms at any time without notifying you',
-              tone: 'info',
-            },
-            three: {
-              label: 'Arbitration Requirement',
-              value:
-                'Forces disputes into private arbitration instead of court',
-              tone: 'info',
-            },
-            four: {
-              label: 'Broad Data Retention',
-              value:
-                'Company keeps your data indefinitely, even after account deletion',
-              tone: 'info',
-            },
-          }}
-          buttonText={{
-            one: 'Get More Info',
-            two: 'See next'
-          }}
-        />
+        <div className="feature-card">
+          <Feature
+            eyebrow="Clause detection"
+            title="Surface risky terms instantly"
+            copy="We flag auto-renewals, one-sided indemnities, non-mutual termination, choice of law mismatches, and more. Customize rules to match your risk profile."
+            imgPosition="right"
+            rowText={{
+              one: {
+                label: 'Auto-Renewal',
+                value: '12 months, 60-day notice',
+                tone: 'warn',
+              },
+              two: {
+                label: 'Liability Cap',
+                value: '2x fees',
+                tone: 'risk',
+              },
+              three: {
+                label: 'Indemnity',
+                value: 'One-sided',
+                tone: 'risk',
+              },
+              four: {
+                label: 'Arbitration',
+                value: 'Signing away right to pursue legal action',
+                tone: 'rights',
+              },
+            }}
+          />
+        </div>
+        <div className="feature-card">
+          <Feature
+            eyebrow="Plain-language summaries"
+            title="Explain complex contracts in seconds"
+            copy="Briefly converts dense legal into digestible summaries with links back to the original clauses — great for terms of service and privacy policies."
+            imgPosition="left"
+            rowText={{
+              one: {
+                label: 'Data Sharing with Third Parties',
+                value:
+                  'Allows your personal data to be sold or shared with advertisers or partners',
+                tone: 'info',
+              },
+              two: {
+                label: 'Unilateral Policy Changes',
+                value:
+                  'Lets the company change terms at any time without notifying you',
+                tone: 'info',
+              },
+              three: {
+                label: 'Arbitration Requirement',
+                value:
+                  'Forces disputes into private arbitration instead of court',
+                tone: 'info',
+              },
+              four: {
+                label: 'Broad Data Retention',
+                value:
+                  'Company keeps your data indefinitely, even after account deletion',
+                tone: 'info',
+              },
+            }}
+            buttonText={{
+              one: 'Get More Info',
+              two: 'See next',
+            }}
+          />
+        </div>
       </div>
     </section>
-  )
+  );
 }
 
 type RowInfo = {
-  label: string
-  value: string
-  tone?: 'ok' | 'info' | 'warn' | 'risk' | 'rights'
-}
+  label: string;
+  value: string;
+  tone?: 'ok' | 'info' | 'warn' | 'risk' | 'rights';
+};
 type RowText = {
-  one?: RowInfo
-  two?: RowInfo
-  three?: RowInfo
-  four?: RowInfo
-}
+  one?: RowInfo;
+  two?: RowInfo;
+  three?: RowInfo;
+  four?: RowInfo;
+};
 type ButtonText = {
-  one?: string
-  two?: string
-}
+  one?: string;
+  two?: string;
+};
 
 function Feature({
   eyebrow,
@@ -321,19 +494,35 @@ function Feature({
   copy,
   imgPosition = 'right',
   rowText,
-  buttonText
+  buttonText,
 }: {
-  eyebrow: string
-  title: string
-  copy: string
-  imgPosition?: 'left' | 'right'
-  rowText?: RowText
-  buttonText?: ButtonText
+  eyebrow: string;
+  title: string;
+  copy: string;
+  imgPosition?: 'left' | 'right';
+  rowText?: RowText;
+  buttonText?: ButtonText;
 }) {
-  const r1 = rowText?.one ?? { label: 'Auto-renewal', value: '12 months, 60-day notice', tone: 'warn' as const }
-  const r2 = rowText?.two ?? { label: 'Liability cap', value: '2× fees', tone: 'risk' as const }
-  const r3 = rowText?.three ?? { label: 'Indemnity', value: 'One-sided', tone: 'risk' as const }
-  const r4 = rowText?.four ?? { label: 'Termination', value: 'For convenience (vendor only)', tone: 'warn' as const }
+  const r1 = rowText?.one ?? {
+    label: 'Auto-renewal',
+    value: '12 months, 60-day notice',
+    tone: 'warn' as const,
+  };
+  const r2 = rowText?.two ?? {
+    label: 'Liability cap',
+    value: '2× fees',
+    tone: 'risk' as const,
+  };
+  const r3 = rowText?.three ?? {
+    label: 'Indemnity',
+    value: 'One-sided',
+    tone: 'risk' as const,
+  };
+  const r4 = rowText?.four ?? {
+    label: 'Termination',
+    value: 'For convenience (vendor only)',
+    tone: 'warn' as const,
+  };
 
   const graphic = (
     <Reveal>
@@ -346,12 +535,16 @@ function Feature({
           <Row label={r4.label} value={r4.value} tone={r4.tone} />
         </div>
         <div className="mt-5 flex gap-2">
-          <button className="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-sm">{buttonText?.one ? buttonText.one : 'Download'}</button>
-          <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-sm">{buttonText?.two ? buttonText.two : 'Copy summary'}</button>
+          <button className="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-sm">
+            {buttonText?.one ? buttonText.one : 'Download'}
+          </button>
+          <button className="px-3 py-1.5 rounded-xl border border-slate-200 text-sm">
+            {buttonText?.two ? buttonText.two : 'Copy summary'}
+          </button>
         </div>
       </div>
     </Reveal>
-  )
+  );
 
   return (
     <div
@@ -361,14 +554,18 @@ function Feature({
     >
       <div>
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{eyebrow}</p>
-          <h3 className="mt-2 text-2xl md:text-3xl font-bold tracking-tight">{title}</h3>
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+            {eyebrow}
+          </p>
+          <h3 className="mt-2 text-2xl md:text-3xl font-bold tracking-tight">
+            {title}
+          </h3>
           <p className="mt-3 text-slate-600 leading-7">{copy}</p>
         </Reveal>
       </div>
       <div>{graphic}</div>
     </div>
-  )
+  );
 }
 
 function Row({
@@ -376,9 +573,9 @@ function Row({
   value,
   tone = 'info',
 }: {
-  label: string
-  value: string
-  tone?: 'ok' | 'info' | 'warn' | 'risk' | 'rights'
+  label: string;
+  value: string;
+  tone?: 'ok' | 'info' | 'warn' | 'risk' | 'rights';
 }) {
   const toneMap: Record<string, string> = {
     ok: 'bg-emerald-50 text-emerald-700 border-emerald-100',
@@ -386,61 +583,84 @@ function Row({
     warn: 'bg-amber-50 text-amber-800 border-amber-100',
     risk: 'bg-rose-50 text-rose-700 border-rose-100',
     rights: 'bg-purple-50 text-purple-700 border-purple-100',
-  }
+  };
   return (
-    <div className={`flex items-center justify-between rounded-2xl border px-4 py-3 ${toneMap[tone]}`}>
+    <div
+      className={`flex items-center justify-between rounded-2xl border px-4 py-3 ${toneMap[tone]}`}
+    >
       <span className="font-medium">{label}</span>
       <span className="text-sm opacity-80">{value}</span>
     </div>
-  )
+  );
 }
 
 function Chip({
   label,
   tone = 'info',
 }: {
-  label: string
-  tone?: 'ok' | 'info' | 'warn' | 'risk'
+  label: string;
+  tone?: 'ok' | 'info' | 'warn' | 'risk';
 }) {
   const toneMap: Record<string, string> = {
     ok: 'bg-emerald-50 text-emerald-700 border-emerald-100',
     info: 'bg-slate-50 text-slate-700 border-slate-100',
     warn: 'bg-amber-50 text-amber-800 border-amber-100',
     risk: 'bg-rose-50 text-rose-700 border-rose-100',
-  }
+  };
   return (
-    <span className={`inline-block text-xs px-3 py-1.5 rounded-full border ${toneMap[tone]}`}>{label}</span>
-  )
+    <span
+      className={`inline-block text-xs px-3 py-1.5 rounded-full border ${toneMap[tone]}`}
+    >
+      {label}
+    </span>
+  );
 }
 
 function HowItWorks() {
   return (
-    <section id="how" className="py-20 bg-slate-50/60 border-y border-slate-100">
+    <section
+      id="how"
+      className="py-20 bg-slate-50/60 border-y border-slate-100"
+    >
       <div className="mx-auto max-w-6xl px-4">
         <Reveal>
           <h2 className="text-3xl font-bold tracking-tight">How it works</h2>
           <p className="mt-2 text-slate-600">Three steps to safer contracts.</p>
         </Reveal>
         <div className="mt-10 grid md:grid-cols-3 gap-6">
-          <Step n={1} title="Upload" desc="Drop a PDF or DOCX. We never train on your data by default." />
-          <Step n={2} title="Review" desc="Briefly highlights risky clauses and explains them in plain English." />
-          <Step n={3} title="Redline" desc="Insert safer language with one click and export a tracked-changes DOCX." />
+          <Step
+            n={1}
+            title="Upload"
+            desc="Drop a PDF or DOCX. We never train on your data by default."
+          />
+          <Step
+            n={2}
+            title="Review"
+            desc="Briefly highlights risky clauses and explains them in plain English."
+          />
+          <Step
+            n={3}
+            title="Redline"
+            desc="Insert safer language with one click and export a tracked-changes DOCX."
+          />
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 function Step({ n, title, desc }: { n: number; title: string; desc: string }) {
   return (
     <Reveal>
       <div className="rounded-3xl border border-slate-100 bg-white p-6">
-        <div className="h-9 w-9 rounded-xl bg-slate-900 text-white grid place-items-center font-bold">{n}</div>
+        <div className="h-9 w-9 rounded-xl bg-slate-900 text-white grid place-items-center font-bold">
+          {n}
+        </div>
         <h4 className="mt-4 font-semibold">{title}</h4>
         <p className="mt-1 text-sm text-slate-600 leading-6">{desc}</p>
       </div>
     </Reveal>
-  )
+  );
 }
 
 function Security() {
@@ -449,7 +669,9 @@ function Security() {
       <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-2 gap-10 items-center">
         <div>
           <Reveal>
-            <h2 className="text-3xl font-bold tracking-tight">Security & privacy by default</h2>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Security & privacy by default
+            </h2>
             <ul className="mt-4 space-y-2 text-slate-600">
               <li>• Data residency controls & object-level encryption</li>
               <li>• SSO/SAML, SCIM, RBAC, audit logs</li>
@@ -467,19 +689,22 @@ function Security() {
               <Badge label="Encryption" />
             </div>
             <p className="mt-5 text-slate-600 text-sm">
-              Granular retention policies and secure export destinations (Drive, Box, S3).
+              Granular retention policies and secure export destinations (Drive,
+              Box, S3).
             </p>
           </div>
         </Reveal>
       </div>
     </section>
-  )
+  );
 }
 
 function Badge({ label }: { label: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-medium">{label}</div>
-  )
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center font-medium">
+      {label}
+    </div>
+  );
 }
 
 function CTA() {
@@ -487,16 +712,28 @@ function CTA() {
     <section id="cta" className="py-20 bg-slate-900 text-white">
       <div className="mx-auto max-w-6xl px-4 text-center">
         <Reveal y={20}>
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">Review contracts 5× faster</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            Review contracts 5× faster
+          </h2>
           <p className="mt-3 text-slate-300">Start free. Cancel anytime.</p>
           <div className="mt-8 flex items-center justify-center gap-3">
-            <a href="#" className="px-5 py-3 rounded-2xl bg-white text-slate-900 font-medium">Start free trial</a>
-            <a href="#" className="px-5 py-3 rounded-2xl border border-white/20">Book a demo</a>
+            <a
+              href="#"
+              className="px-5 py-3 rounded-2xl bg-white text-slate-900 font-medium"
+            >
+              Start free trial
+            </a>
+            <a
+              href="#"
+              className="px-5 py-3 rounded-2xl border border-white/20"
+            >
+              Book a demo
+            </a>
           </div>
         </Reveal>
       </div>
     </section>
-  )
+  );
 }
 
 function Footer() {
@@ -508,14 +745,24 @@ function Footer() {
           <span className="font-semibold text-slate-700">Briefly.AI</span>
         </div>
         <div className="flex gap-6">
-          <a href="#features" className="hover:text-slate-700">Features</a>
-          <a href="#how" className="hover:text-slate-700">How it works</a>
-          <a href="#security" className="hover:text-slate-700">Security</a>
-          <a href="#" className="hover:text-slate-700">Terms</a>
-          <a href="#" className="hover:text-slate-700">Privacy</a>
+          <a href="#features" className="hover:text-slate-700">
+            Features
+          </a>
+          <a href="#how" className="hover:text-slate-700">
+            How it works
+          </a>
+          <a href="#security" className="hover:text-slate-700">
+            Security
+          </a>
+          <a href="#" className="hover:text-slate-700">
+            Terms
+          </a>
+          <a href="#" className="hover:text-slate-700">
+            Privacy
+          </a>
         </div>
         <div>© {new Date().getFullYear()} Briefly.AI</div>
       </div>
     </footer>
-  )
+  );
 }
